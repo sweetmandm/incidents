@@ -2,27 +2,32 @@
  * Fetch incidents from nciweb.nwcg.gov and store them in mongodb
  */
 
-const MongoClient = require('mongodb').MongoClient;
 const Parser = require('rss-parser');
+const db = require('../models/db');
+import IFeedIncident from '../interfaces/feedIncident';
+import { Incident, IIncident } from '../models/incident';
 
-const mongoUrl = 'mongodb://localhost:27017';
 const inciwebRss = 'https://inciweb.nwcg.gov/feeds/rss/';
 const incidentsRssUrl = `${inciwebRss}/incidents`;
 const rss = new Parser({
   customFields: {
-    item: ['geo:lat', 'geo:long'],
-  },
+    item: ['geo:long', 'geo:lat'],
+  }
 });
 
-function prepareDoc(doc: object): object {
-  const point = {
-    type: 'Point',
-    coordinates: [doc['geo:lat'], doc['geo:long']],
-  };
-  return { point };
+function prepareDoc(doc: IFeedIncident): IIncident {
+  return new Incident({
+    point: {
+      type: 'Point',
+      coordinates: [parseFloat(doc['geo:long']), parseFloat(doc['geo:lat'])],
+    },
+    content: doc.content,
+    title: doc.title,
+    pubDate: doc.pubDate
+  });
 }
 
-function fetchIncidents(): Promise<object[]> {
+function fetchIncidents(): Promise<IIncident[]> {
   return new Promise((resolve) => {
     rss.parseURL(incidentsRssUrl, (err, data) => {
       const items = data.items.map(prepareDoc);
@@ -31,17 +36,13 @@ function fetchIncidents(): Promise<object[]> {
   });
 }
 
-function insertDocuments(collectionName: string, documents: object[]): void {
-  MongoClient.connect(mongoUrl, { useNewUrlParser: true }, (err, client) => {
-    const db = client.db('incidents');
-    const collection = db.collection(collectionName)
-    collection.insertMany(documents, () => client.close());
-  });
+function insertIncidents(incidents: IIncident[]): void {
+  Incident.insertMany(incidents);
 }
 
 function process(): void {
   fetchIncidents().then((incidents) => {
-    insertDocuments('incidents', incidents);
+    insertIncidents(incidents);
   });
 }
 
