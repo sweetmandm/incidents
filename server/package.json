@@ -16,6 +16,7 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "mongodb": "^3.1.4",
+    "mongoose": "^5.2.12",
     "morgan": "~1.9.0",
     "rss-parser": "^3.4.3",
     "typescript": "^3.0.3",
@@ -23,6 +24,8 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
+    "@types/mongodb": "^3.1.4",
+    "@types/mongoose": "^5.2.9",
     "@types/node": "^10.9.4",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0"
