@@ -2,9 +2,9 @@ import { Document, Schema, Model, model } from 'mongoose';
 
 export interface IIncident extends Document {
   title: string,
-  description: string,
+  content: string,
   link: string,
-  pulished: Date,
+  pubDate: Date,
   point: {
     type: { type: string },
     coordinates: [number]

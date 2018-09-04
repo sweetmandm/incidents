@@ -6,4 +6,7 @@ process.on('SIGINT', function() {
   mongoose.connection.close(function () { process.exit(0); });
 });
 
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 require('./incident');
