@@ -4,7 +4,7 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 
-import perform from './jobs/incident-rss/incidents';
+import registerCronJobs from './jobs/cronjobs';
 
 let indexRouter = require('./routes/index');
 
@@ -27,4 +27,4 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-perform();
+registerCronJobs();

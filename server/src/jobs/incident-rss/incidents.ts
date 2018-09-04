@@ -5,41 +5,32 @@
 import IncidentRssParser from './incidentRssParser';
 import RssFetch from './rssFetch';
 import IFeedIncident from '../../interfaces/feedIncident';
-import { Incident, IIncident } from '../../models/incident';
+import { Incident, IIncident, incidentAttrsFromFeedIncident } from '../../models/incident';
 
 const db = require('../../models/db');
 const rss = new RssFetch(new IncidentRssParser());
 
 function lastIncident(): Promise<IIncident> {
-  return Incident.findOne().sort({ pubDate: -1 }).limit(1).exec();
+  return Incident.findOne().sort({ pubDate: -1 }).exec();
 }
 
-function prepareDoc(doc: IFeedIncident): IIncident {
-  return new Incident({
-    _id: doc.guid,
-    point: {
-      type: 'Point',
-      coordinates: [parseFloat(doc['geo:long']), parseFloat(doc['geo:lat'])],
-    },
-    content: doc.content,
-    title: doc.title,
-    pubDate: doc.pubDate
+function upsert(items: IFeedIncident[]) {
+  const incidents = items.map(incidentAttrsFromFeedIncident);
+  incidents.forEach(function(incident) {
+    console.log(`Incident ID: ${incident._id} d: ${incident.pubDate}`)
+    Incident.findOneAndUpdate({_id: incident._id}, {$set: incident}, { upsert: true }, function(err,i) { console.log('done'); });
   });
 }
 
-function insert(items: IFeedIncident[]) {
-  const incidents = items.map(prepareDoc);
-  Incident.insertMany(incidents);
-}
-
-function perform() {
+function performIncidentFetch() {
   lastIncident().then((last) => {
+    console.log(`Last incident: ${last._id} d: ${last.pubDate}`)
     return rss.fetchFrom(last ? last.pubDate : null);
   }).then((newItems) => {
-    insert(newItems as IFeedIncident[]);
+    upsert(newItems as IFeedIncident[]);
   }).catch((err) => {
     console.log(err);
   });
 }
 
-export default perform;
+export default performIncidentFetch;
