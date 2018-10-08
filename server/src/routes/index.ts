@@ -1,7 +1,6 @@
-let express = require('express');
-let router = express.Router();
+import { Router } from 'express';
+let router = Router();
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   res.json({
     hey: "This is the response"

@@ -7,6 +7,7 @@ let logger = require('morgan');
 import registerCronJobs from './jobs/cronjobs';
 
 let indexRouter = require('./routes/index');
+let incidentsRouter = require('./routes/incidents');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/incidents', incidentsRouter);
 
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;

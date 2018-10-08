@@ -17,8 +17,11 @@ function lastIncident(): Promise<IIncident> {
 function upsert(items: IFeedIncident[]) {
   const incidents = items.map(incidentAttrsFromFeedIncident);
   incidents.forEach(function(incident) {
-    console.log(`Incident ID: ${incident._id} d: ${incident.pubDate}`)
-    Incident.findOneAndUpdate({_id: incident._id}, {$set: incident}, { upsert: true }, function(err,i) { console.log('done'); });
+    console.log(`Incident ID: ${incident._id}`)
+    Incident.findOneAndUpdate(
+      {_id: incident._id},
+      {$set: incident},
+      { upsert: true });
   });
 }
 
