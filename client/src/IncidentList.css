@@ -1,0 +1,23 @@
+.incident-list {
+  background: #fff;
+}
+
+.incidents {
+  height: 100%;
+  overflow: auto;
+}
+
+.incidents .item {
+  padding: 20px;
+}
+
+@media only screen and (max-width: 960px) {
+  .incident-list.sm-closed {
+    display: none;
+  }
+
+  .incident-list.sm-open {
+    display: block;
+  }
+}
+

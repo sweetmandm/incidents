@@ -21,7 +21,8 @@ function upsert(items: IFeedIncident[]) {
     Incident.findOneAndUpdate(
       {_id: incident._id},
       {$set: incident},
-      { upsert: true });
+      { upsert: true }
+    ).exec();
   });
 }
 

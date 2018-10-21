@@ -1,21 +1,35 @@
 import * as React from 'react';
 import './App.css';
+import IncidentList from './IncidentList';
+import Map from './Map';
 
-import logo from './logo.svg';
+interface IState {
+  incidents: any[];
+}
 
-class App extends React.Component {
+class App extends React.Component<object, IState>  {
+  public constructor(props: object) {
+    super(props);
+    this.state = { incidents: [] };
+  }
+
+  public componentDidMount() {
+    this.fetchIncidents();
+  }
+
   public render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+      <div className='app'>
+        <IncidentList incidents={this.state.incidents} />
+        <Map incidents={this.state.incidents} />
       </div>
     );
+  }
+
+  protected fetchIncidents() {
+    fetch('http://localhost:3000/incidents')
+      .then((res) =>  res.json())
+      .then((json) => this.setState({ incidents: json }));
   }
 }
 
