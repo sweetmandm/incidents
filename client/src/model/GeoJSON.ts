@@ -1,5 +1,5 @@
-import { IGeoPoint, IGeoPointCollection } from './interfaces/geojson';
-import IIncident from './interfaces/incident';
+import { IGeoPoint, IGeoPointCollection } from '../interfaces/geojson';
+import IIncident from '../interfaces/incident';
 
 function incidentToGeoJSON(incident: IIncident): IGeoPoint {
   return {

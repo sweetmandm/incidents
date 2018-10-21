@@ -1,10 +1,12 @@
 import * as mapboxgl from 'mapbox-gl';
 import * as React from 'react';
-import config from './config';
-import { incidentsToGeoJSON } from './GeoJSON';
-import IIncident from './interfaces/incident';
+import config from '../config';
+import IIncident from '../interfaces/incident';
+import { incidentsToGeoJSON } from '../model/GeoJSON';
 
 (mapboxgl as any).accessToken = config.token;
+
+const MAP_MARKER_ID = 'incident-markers';
 
 export interface IProps {
   incidents: IIncident[];
@@ -31,7 +33,7 @@ class Map extends React.Component<IProps, IState> {
       style: 'mapbox://styles/mapbox/streets-v9',
       zoom: 3
     });
-    this.map.on('load', this.addMapMarkers.bind(this));
+    this.map.on('load', this.resetMapMarkers.bind(this));
   }
 
   public componentWillUnmount() {
@@ -40,26 +42,41 @@ class Map extends React.Component<IProps, IState> {
 
   public componentWillReceiveProps(nextProps: IProps) {
     this.setState({ incidents: nextProps.incidents });
+    this.map.on('load', this.resetMapMarkers.bind(this));
   }
 
   public render() {
     return <div className='map' ref={el => this.mapContainer = el} />;
   }
 
+  protected resetMapMarkers() {
+    this.removeMapMarkers(this.addMapMarkers.bind(this));
+  }
+
+  protected removeMapMarkers(cb: () => void) {
+    if (this.map.getSource(MAP_MARKER_ID) !== undefined) {
+      this.map.removeSource(MAP_MARKER_ID, cb);
+    } else {
+      cb();
+    }
+  }
+
   protected addMapMarkers() {
-    this.map.addSource('incidents', {
+    this.map.addSource(MAP_MARKER_ID, {
       data: incidentsToGeoJSON(this.state.incidents),
       type: 'geojson'
     });
     this.state.incidents.forEach((incident) => {
       const el = document.createElement('div');
       el.className = 'marker';
-      el.innerHTML = 'hey!';
-      new mapboxgl.Marker(el, { offset: [0, 23] })
-      .setLngLat({
+      el.innerHTML = '🔥';
+      const coords = {
         lat: incident.point.coordinates[1],
         lng: incident.point.coordinates[0]
-      }).addTo(this.map);
+      };
+      new mapboxgl.Marker(el)
+        .setLngLat(coords)
+        .addTo(this.map);
     });
   }
 }
