@@ -1,18 +1,24 @@
 import * as React from 'react';
-import './IncidentList.css';
+import IIncident from '../interfaces/incident';
+import IncidentRow from './IncidentRow';
 
 export interface IProps {
-  incidents: any[];
+  incidents: IIncident[];
+  onClick: (incident: IIncident) => void;
 }
 
 interface IState {
-  incidents: any[];
+  incidents: IIncident[];
+  onClick: (incident: IIncident) => void;
 }
 
 class IncidentList extends React.Component<IProps, IState> {
   public constructor(props: IProps) {
     super(props);
-    this.state = { incidents: props.incidents };
+    this.state = {
+      incidents: props.incidents,
+      onClick: props.onClick
+    };
   }
 
   public componentWillReceiveProps(nextProps: IProps) {
@@ -24,14 +30,15 @@ class IncidentList extends React.Component<IProps, IState> {
       <div>
         <div><button>List</button></div>
         <div className='incident-list sm-closed'>
-          <h2>Incidents:</h2>
+          <div className='title'>
+            <h2>🔥 Incidents</h2>
+          </div>
           <div className='incidents'>
             {this.state.incidents.map((i) => {
-              return <div
-                className='item'
-                key={i.title}>
-                {i.title}
-              </div>;
+              return <IncidentRow
+                incident={i}
+                key={i.title}
+                onClick={this.state.onClick} />
             })}
           </div>
         </div>

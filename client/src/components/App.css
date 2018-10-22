@@ -1,6 +1,4 @@
-.app {
-  display: flex;
-}
+.app { }
 
 .map {
   position: absolute;
@@ -15,13 +13,11 @@
   left: 0;
   overflow: hidden;
   position: absolute;
+  display: flex;
+  flex-direction: column;
 }
 
 @media only screen and (max-width: 960px) {
-  .app {
-    flex-direction: column;
-  }
-
   .map {
     width: 100%;
     z-index: -10;
@@ -33,10 +29,6 @@
 }
 
 @media only screen and (min-width: 961px) {
-  .app {
-    flex-direction: row;
-  }
-
   .map {
     left: 360px;
     right: 0;
@@ -44,6 +36,42 @@
 
   .incident-list {
     width: 360px;
+  }
+}
+
+.incident-list {
+  background: #fff;
+}
+
+.incident-list h2 {
+  padding: 0 0 0 20px;
+}
+
+.title {
+  background-color: #f0f0ff;
+}
+
+.incidents {
+  height: 100%;
+  overflow: auto;
+  border-left: solid 2px #bbbbff;
+  border-right: solid 1px #bbbbff;
+  border-top: solid 1px #bbbbff;
+}
+
+.incidents .item {
+  padding: 20px;
+  border-bottom: solid 1px #eee0ff;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 960px) {
+  .incident-list.sm-closed {
+    display: none;
+  }
+
+  .incident-list.sm-open {
+    display: block;
   }
 }
 
