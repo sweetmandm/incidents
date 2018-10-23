@@ -26,6 +26,12 @@
   .incident-list {
     width: 100%;
   }
+
+  .incident-list .close-btn {
+    padding: 6px 14px;
+    position: absolute;
+    right: 0;
+  }
 }
 
 @media only screen and (min-width: 961px) {
@@ -37,18 +43,33 @@
   .incident-list {
     width: 360px;
   }
+
+  .incident-list .close-btn {
+    display: none;
+  }
 }
 
 .incident-list {
   background: #fff;
 }
 
-.incident-list h2 {
-  padding: 0 0 0 20px;
+.incident-list .title {
+  padding: 20px;
+  margin: 0;
+  background-color: #f0f0ff;
 }
 
-.title {
-  background-color: #f0f0ff;
+.incident-list h2 {
+  display: inline;
+}
+
+.list-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #fff;
+  border: solid 1px #eee0ff;
+  padding: 5px 10px;
 }
 
 .incidents {
@@ -101,11 +122,22 @@
 
 @media only screen and (max-width: 960px) {
   .incident-list.sm-closed {
-    display: none;
+    left: 0;
+    animation: slide-out 0.3s forwards;
   }
 
   .incident-list.sm-open {
     display: block;
+    left: -100%;
+    animation: slide-in 0.3s forwards;
+  }
+
+  @keyframes slide-in {
+    100% { left: 0; };
+  }
+
+  @keyframes slide-out {
+    100% { left: -100%; };
   }
 }
 
