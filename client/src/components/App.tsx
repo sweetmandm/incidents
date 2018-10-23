@@ -33,6 +33,7 @@ class App extends React.Component<object, IState>  {
         <Map
           incidents={this.state.incidents}
           selected={this.state.selected}
+          onClick={this.selectIncident}
         />
       </div>
     );

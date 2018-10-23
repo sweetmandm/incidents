@@ -10,11 +10,13 @@ const MAP_MARKER_ID = 'incident-markers';
 
 export interface IProps {
   incidents: IIncident[];
+  onClick: (incident: IIncident) => void;
   selected: IIncident | null;
 }
 
 interface IState {
   incidents: IIncident[];
+  onClick: (incident: IIncident) => void;
   selected: IIncident | null;
 }
 
@@ -70,6 +72,10 @@ class Map extends React.Component<IProps, IState> {
     }
   }
 
+  protected handleClick = (incident: IIncident) => {
+    this.state.onClick(incident);
+  }
+
   protected addMapMarkers() {
     this.map.addSource(MAP_MARKER_ID, {
       data: incidentsToGeoJSON(this.state.incidents),
@@ -79,6 +85,7 @@ class Map extends React.Component<IProps, IState> {
       const el = document.createElement('div');
       el.className = 'marker';
       el.innerHTML = '🔥';
+      el.addEventListener('click', this.handleClick.bind(this, incident));
       const coords = {
         lat: incident.point.coordinates[1],
         lng: incident.point.coordinates[0]

@@ -15,8 +15,6 @@ interface IState {
 }
 
 class IncidentRow extends React.Component<IProps, IState> {
-  public el: HTMLElement | null;
-
   public constructor(props: IProps) {
     super(props);
     this.state = {
@@ -34,18 +32,6 @@ class IncidentRow extends React.Component<IProps, IState> {
     });
   }
 
-  public componentDidMount() {
-    if (this.el) {
-      this.el.addEventListener('click', this.handleClick);
-    }
-  }
-
-  public componentWillUnmount() {
-    if (this.el) {
-      this.el.removeEventListener('click', this.handleClick);
-    }
-  }
-
   public shouldComponentUpdate(nextProps: IProps) {
     return (
       nextProps.incident._id !== this.state.incident._id ||
@@ -56,8 +42,8 @@ class IncidentRow extends React.Component<IProps, IState> {
   public render() {
     return (
       <button
-        ref={el => this.el = el}
         className={this.buildClassName()}
+        onClick={this.handleClick}
       >
         <div className='incident-title'>
           {renderSpecialChars(this.state.incident.title)}
@@ -69,7 +55,7 @@ class IncidentRow extends React.Component<IProps, IState> {
     );
   }
 
-  private handleClick = (event: Event) => {
+  private handleClick = () => {
     this.state.onClick(this.state.incident);
   }
 
