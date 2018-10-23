@@ -27,9 +27,13 @@ class App extends React.Component<object, IState>  {
       <div className='app'>
         <IncidentList
           incidents={this.state.incidents}
+          selected={this.state.selected}
           onClick={this.selectIncident}
         />
-        <Map incidents={this.state.incidents} />
+        <Map
+          incidents={this.state.incidents}
+          selected={this.state.selected}
+        />
       </div>
     );
   }
@@ -37,11 +41,17 @@ class App extends React.Component<object, IState>  {
   protected fetchIncidents() {
     fetch('http://localhost:3000/incidents')
       .then((res) =>  res.json())
-      .then((json) => this.setState({ incidents: json }));
+      .then((json) => this.setState({
+        ...this.state,
+        incidents: json
+      }));
   }
 
   protected selectIncident = (incident: IIncident) => {
-    this.setState({...this.state, selected: incident });
+    this.setState({
+      ...this.state,
+      selected: incident
+    });
   }
 }
 

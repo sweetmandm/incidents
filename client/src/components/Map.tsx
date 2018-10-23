@@ -10,10 +10,12 @@ const MAP_MARKER_ID = 'incident-markers';
 
 export interface IProps {
   incidents: IIncident[];
+  selected: IIncident | null;
 }
 
 interface IState {
   incidents: IIncident[];
+  selected: IIncident | null;
 }
 
 class Map extends React.Component<IProps, IState> {
@@ -23,7 +25,7 @@ class Map extends React.Component<IProps, IState> {
 
   public constructor(props: IProps) {
     super(props);
-    this.state = { incidents: props.incidents };
+    this.state = { ...props };
   }
 
   public componentDidMount() {
@@ -41,12 +43,19 @@ class Map extends React.Component<IProps, IState> {
   }
 
   public componentWillReceiveProps(nextProps: IProps) {
-    this.setState({ incidents: nextProps.incidents });
+    this.setState({ ...nextProps }, () => {
+      if (this.state.selected) {
+        this.showIncident(this.state.selected);
+      }
+    });
     this.map.on('load', this.resetMapMarkers.bind(this));
   }
 
   public render() {
-    return <div className='map' ref={el => this.mapContainer = el} />;
+    return <div
+      className='map'
+      ref={el => this.mapContainer = el}
+    />;
   }
 
   protected resetMapMarkers() {
@@ -78,6 +87,42 @@ class Map extends React.Component<IProps, IState> {
         .setLngLat(coords)
         .addTo(this.map);
     });
+  }
+
+  protected showIncident(incident: IIncident | null) {
+    this.zoomToIncident(incident);
+    this.showPopup(incident);
+  }
+
+  protected zoomToIncident(incident: IIncident | null) {
+    if (incident) {
+      this.map.flyTo({
+        center: incident.point.coordinates,
+        offset: [0, 170],
+        zoom: 5
+      });
+    }
+  }
+
+  protected showPopup(incident: IIncident | null) {
+    const existing = document.getElementsByClassName('mapboxgl-popup');
+    if (existing[0]) { existing[0].remove(); }
+    if (incident) {
+      const coords = {
+        lat: incident.point.coordinates[1],
+        lng: incident.point.coordinates[0]
+      };
+      const opts: mapboxgl.PopupOptions = {
+        anchor: 'bottom',
+        className: 'incident-popup',
+        closeOnClick: false,
+        offset: [0, -10]
+      };
+      new mapboxgl.Popup(opts)
+        .setLngLat(coords)
+        .setHTML(`<h3>${incident.title}</h3><p>${incident.content}</p>`)
+        .addTo(this.map);
+    }
   }
 }
 

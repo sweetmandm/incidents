@@ -5,11 +5,13 @@ import IncidentRow from './IncidentRow';
 export interface IProps {
   incidents: IIncident[];
   onClick: (incident: IIncident) => void;
+  selected: IIncident | null;
 }
 
 interface IState {
   incidents: IIncident[];
   onClick: (incident: IIncident) => void;
+  selected: IIncident | null;
 }
 
 class IncidentList extends React.Component<IProps, IState> {
@@ -17,12 +19,17 @@ class IncidentList extends React.Component<IProps, IState> {
     super(props);
     this.state = {
       incidents: props.incidents,
-      onClick: props.onClick
+      onClick: props.onClick,
+      selected: props.selected
     };
   }
 
   public componentWillReceiveProps(nextProps: IProps) {
-    this.setState({ incidents: nextProps.incidents });
+    this.setState({
+      incidents: nextProps.incidents,
+      onClick: nextProps.onClick,
+      selected: nextProps.selected
+    });
   }
 
   public render() {
@@ -38,12 +45,19 @@ class IncidentList extends React.Component<IProps, IState> {
               return <IncidentRow
                 incident={i}
                 key={i.title}
-                onClick={this.state.onClick} />
+                onClick={this.state.onClick}
+                isSelected={this.isSelected(i)}
+              />
             })}
           </div>
         </div>
       </div>
     );
+  }
+
+  protected isSelected(incident: IIncident) {
+    if (this.state.selected === null) { return false; }
+    return this.state.selected._id === incident._id;
   }
 }
 

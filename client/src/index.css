@@ -1,5 +1,22 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font: 16px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
+
+button {
+  cursor: pointer;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
