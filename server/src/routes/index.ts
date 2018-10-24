@@ -1,10 +1,10 @@
 import { Router } from 'express';
-let router = Router();
+let indexRouter = Router();
 
-router.get('/', function(req, res, next) {
+indexRouter.get('/', function(req, res, next) {
   res.json({
     hey: "This is the response"
   });
 });
 
-module.exports = router;
+export default indexRouter;

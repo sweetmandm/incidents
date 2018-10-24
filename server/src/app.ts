@@ -1,13 +1,11 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
-
+import * as express from 'express';
+import * as path from 'path';
+import * as logger from 'morgan';
+import * as cookieParser from 'cookie-parser';
+import createError from 'http-errors';
 import registerCronJobs from './jobs/cronjobs';
-
-let indexRouter = require('./routes/index');
-let incidentsRouter = require('./routes/incidents');
+import indexRouter from './routes/index';
+import incidentsRouter from './routes/incidents';
 
 const app = express();
 
@@ -27,6 +25,7 @@ app.use(function(err, req, res, next) {
   res.json('error');
 });
 
+registerCronJobs();
+
 module.exports = app;
 
-registerCronJobs();

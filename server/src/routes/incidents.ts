@@ -1,8 +1,8 @@
 import { Router } from 'express';
-let router = Router();
+let incidentsRouter = Router();
 import { Incident } from '../models/incident';
 
-router.get('/', function(req, res, next) {
+incidentsRouter.get('/', function(req, res, next) {
   Incident.find({})
     .sort({ pubDate: -1 })
     .limit(100)
@@ -11,4 +11,4 @@ router.get('/', function(req, res, next) {
     });
 });
 
-module.exports = router;
+export default incidentsRouter;
