@@ -1,5 +1,7 @@
-const mongoose = require('mongoose');
-const mongoUrl = 'mongodb://localhost:27017/incidents';
+import * as mongoose from 'mongoose';
+import config from '../config';
+
+const mongoUrl = `${config.mongoUrl}/incidents`;
 mongoose.connect(mongoUrl, { useNewUrlParser: true });
 
 process.on('SIGINT', function() {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import config from '../config';
 import IIncident from '../interfaces/incident';
 import './App.css';
 import IncidentList from './IncidentList';
@@ -40,7 +41,7 @@ class App extends React.Component<object, IState>  {
   }
 
   protected fetchIncidents() {
-    fetch('http://localhost:3000/incidents')
+    fetch(`${config.url}/incidents`)
       .then((res) =>  res.json())
       .then((json) => this.setState({
         ...this.state,

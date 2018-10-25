@@ -28,7 +28,9 @@ function upsert(items: IFeedIncident[]) {
 
 function performIncidentFetch() {
   lastIncident().then((last) => {
-    console.log(`Last incident: ${last._id} d: ${last.pubDate}`)
+    if (last) {
+      console.log(`Last incident: ${last._id} d: ${last.pubDate}`)
+    }
     return rss.fetchFrom(last ? last.pubDate : null);
   }).then((newItems) => {
     upsert(newItems as IFeedIncident[]);

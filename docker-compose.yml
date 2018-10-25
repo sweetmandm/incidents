@@ -1,0 +1,22 @@
+version: "3.2"
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - data-volume:/data/db
+  server:
+    build: "./server"
+    environment:
+      - MONGO_URL="mongodb://mongo:27017"
+    ports:
+      - "8080:8080"
+  #client:
+  #  build: "./client"
+  #  environment:
+  #    - SERVER_URL="http://server:27017"
+
+volumes:
+  data-volume:
