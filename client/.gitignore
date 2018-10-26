@@ -8,7 +8,7 @@
 
 # production
 /build
-config.ts
+config*.ts
 
 # misc
 .DS_Store

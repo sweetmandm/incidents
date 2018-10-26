@@ -13,10 +13,10 @@ services:
       - MONGO_URL="mongodb://mongo:27017"
     ports:
       - "8080:8080"
-  #client:
-  #  build: "./client"
-  #  environment:
-  #    - SERVER_URL="http://server:27017"
+  client:
+    build: "./client"
+    ports:
+      - "5000:5000"
 
 volumes:
   data-volume:
