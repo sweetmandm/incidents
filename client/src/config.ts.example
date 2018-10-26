@@ -1,4 +1,4 @@
 export default {
+  serverUrl: 'http://localhost:3000',
   token: "your-mapbox-token",
-  url: `${process.env.SERVER_URL || 'http://localhost:3000'}`,
 };
