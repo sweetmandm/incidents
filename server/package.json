@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run tsc && node ./bin/www",
+    "serve": "node ./bin/www",
     "tsc": "./node_modules/typescript/bin/tsc",
     "tsc-watch": "./node_modules/typescript/bin/tsc -w",
     "lint": "node_modules/eslint/bin/eslint.js --ext ts ./src",

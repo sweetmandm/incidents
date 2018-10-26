@@ -41,7 +41,7 @@ class App extends React.Component<object, IState>  {
   }
 
   protected fetchIncidents() {
-    fetch(`${config.url}/incidents`)
+    fetch(`${config.serverUrl}/incidents`)
       .then((res) =>  res.json())
       .then((json) => this.setState({
         ...this.state,
